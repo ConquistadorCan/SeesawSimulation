@@ -32,6 +32,22 @@ body {
     background: yellow;
 }
 
+#seesaw-input {
+    width: 80%;
+    height: 100%;
+    margin: auto;
+    position: relative;
+}
+
+.weight {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: blue;
+    position: absolute;
+    transition: bottom 0.5s;
+}
+
 #controls {
     background: aqua;
     width: 800px;
