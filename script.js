@@ -1,6 +1,10 @@
 // GLOBAL VARIABLES
 const seesaw = document.getElementById('seesaw-input');
 const plank = document.getElementById('seesaw-plank');
+const nextWeightDisplay = document.getElementById('next-weight');
+const leftWeightDisplay = document.getElementById('left-weight');
+const rightWeightDisplay = document.getElementById('right-weight');
+const tiltAngleDisplay = document.getElementById('tilt-angle');
 
 const PLANK_BASE_BOTTOM = 145; // 500px seesaw height / 4 because seesawplank is 25% of seesaw height + 20px seesaw plank height
 const PIVOT_X = seesaw.offsetWidth / 2;
@@ -8,7 +12,9 @@ const PIVOT_Y = PLANK_BASE_BOTTOM + 10; // 10px is half of seesaw plank height
 const MAX_PLANK_ANGLE = 30;
 
 let plankAngle = 0;
-let nextWeight = 1; //Math.floor(Math.random() * 10) + 1;
+let nextWeight = Math.floor(Math.random() * 10) + 1;
+let leftWeight = 0;
+let rightWeight = 0;
 
 let weights = [];
 
@@ -40,11 +46,11 @@ seesaw.addEventListener('click', function(event) {
             y: PLANK_BASE_BOTTOM
         });
         updateWeightsPos();
+        updateDisplays(clickX);
     }, 10);
     
     seesaw.appendChild(obj);
 
-    //updateNextWeight();
 });
 
 
@@ -89,5 +95,28 @@ function updateNextWeight() {
     nextWeight = Math.floor(Math.random() * 10) + 1;
 }
 
+function updateDisplays(clickX) {
+    if (clickX === undefined) {
+        leftWeight = 0;
+        rightWeight = 0;
+    }
+    else{
+        if (clickX < PIVOT_X) {
+            leftWeight += nextWeight;
+        } else if (clickX > PIVOT_X) {
+            rightWeight += nextWeight;
+        }
+    }
+    
+    leftWeightDisplay.textContent = `${leftWeight} KG`;
+    rightWeightDisplay.textContent = `${rightWeight} KG`;
+
+    updateNextWeight();
+    nextWeightDisplay.textContent = `${nextWeight} KG`;;
+
+    tiltAngleDisplay.textContent = plankAngle.toFixed(2) + '°';
+}
 
 // TEST AREA
+
+updateDisplays();
