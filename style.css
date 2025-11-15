@@ -39,6 +39,26 @@ body {
     position: relative;
 }
 
+#seesaw-plank {
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    background: brown;
+    bottom: 25%; /* 500 / 4 = 125px */
+    border-radius: 5px;
+}
+
+#seesaw-pivot {
+    position: absolute;
+    width: 35px;
+    height: 35px; /* 125 - 100 + 20/2 (height of the plank) */
+    background: darkgray;
+    bottom: 20%; /* 500 / 5 = 100px */
+    left: 50%;
+    transform: translateX(-50%);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
 .weight {
     width: 30px;
     height: 30px;
