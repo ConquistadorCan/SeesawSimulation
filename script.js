@@ -1,8 +1,24 @@
+// GLOBAL VARIABLES
 const seesaw = document.getElementById('seesaw-input');
 
+const PLANK_BASE_BOTTOM = 145; // 500px seesaw height / 4 because seesawplank is 25% of seesaw height + 20px seesaw plank height
+const PIVOT_X = seesaw.offsetWidth / 2;
+const PIVOT_Y = PLANK_BASE_BOTTOM + 10; // 10px is half of seesaw plank height
+
+let plankAngle = 0;
+let nextWeight = 1; //Math.floor(Math.random() * 10) + 1;
+
+let weights = [];
+
+let leftTorque = 0;
+let rightTorque = 0;
+
+// EVENT LISTENERS
 seesaw.addEventListener('click', function(event) {
     const rect = seesaw.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
+
+    updateTorque(clickX, nextWeight);
 
     const obj = document.createElement('div');
     obj.classList.add('weight');
@@ -10,9 +26,44 @@ seesaw.addEventListener('click', function(event) {
     obj.style.bottom = '500px';
 
     setTimeout(() => {
-        obj.style.bottom = '145px';
-        // 500px seesaw height / 4 because seesawplank is 25% of seesaw height + 20px seesaw plank height
+        obj.style.bottom = `${PLANK_BASE_BOTTOM}px`;
     }, 10);
-
+    
     seesaw.appendChild(obj);
+
+    //updateWeights();
+
+    weights.push({
+        element: obj,
+        weight: nextWeight,
+        x: clickX,
+        y: PLANK_BASE_BOTTOM
+    });
+
+    //updateNextWeight();
 });
+
+// HELPER FUNCTIONS
+
+function updateTorque(clickX, weight) {
+    if (clickX < PIVOT_X) { // left side
+        leftTorque += (PIVOT_X - clickX) * weight;
+    } else { // right side
+        rightTorque += (clickX - PIVOT_X) * weight;
+    }
+}
+
+function updateWeights() {
+    weights.forEach(weight => {
+        weight.element.style.bottom = `10px`;
+    });
+}
+
+function updateNextWeight() {
+    nextWeight = Math.floor(Math.random() * 10) + 1;
+}
+
+// TEST AREA
+const plank = document.getElementById('seesaw-plank');
+
+plank.style.transform = `rotate(${plankAngle}deg)`;

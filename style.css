@@ -46,6 +46,7 @@ body {
     background: brown;
     bottom: 25%; /* 500 / 4 = 125px */
     border-radius: 5px;
+    transition: transform 0.5s;
 }
 
 #seesaw-pivot {
