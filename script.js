@@ -127,6 +127,7 @@ function addLog(weight, clickX) {
     const distance = Math.abs(clickX - PIVOT_X);
 
     entry.textContent = `Added ${weight} KG to ${side} side at distance ${distance.toFixed(2)} px.`;
+    entry.classList.add("log-content");
     log.prepend(entry);
 }
 

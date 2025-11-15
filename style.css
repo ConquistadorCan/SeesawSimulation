@@ -97,14 +97,34 @@ body {
     border-radius: 5px;
     background-color: #C9B59C;
     cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+#reset-button:hover {
+    background-color: #c9aa83;
+    transform: scale(1.05);
+}
+
+#reset-button:active {
+    transform: scale(0.95);
 }
 
 #log {
     width: 800px;
+    padding: 10px 20px;
     margin: 20px auto;
     height: 150px;
     background: #F9F8F6;
     border-radius: 8px;
     box-shadow: 0 0 6px rgba(0,0,0,0.1);
     font-size: 14px;
+    overflow-y: auto;
+}
+
+.log-content {
+    padding: 4px 8px;
+    background-color: #D9CFC7;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
 }
