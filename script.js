@@ -1,9 +1,11 @@
 // GLOBAL VARIABLES
 const seesaw = document.getElementById('seesaw-input');
+const plank = document.getElementById('seesaw-plank');
 
 const PLANK_BASE_BOTTOM = 145; // 500px seesaw height / 4 because seesawplank is 25% of seesaw height + 20px seesaw plank height
 const PIVOT_X = seesaw.offsetWidth / 2;
 const PIVOT_Y = PLANK_BASE_BOTTOM + 10; // 10px is half of seesaw plank height
+const MAX_PLANK_ANGLE = 30;
 
 let plankAngle = 0;
 let nextWeight = 1; //Math.floor(Math.random() * 10) + 1;
@@ -19,6 +21,8 @@ seesaw.addEventListener('click', function(event) {
     const clickX = event.clientX - rect.left;
 
     updateTorque(clickX, nextWeight);
+
+    updatePlankAngle();
 
     const obj = document.createElement('div');
     obj.classList.add('weight');
@@ -53,6 +57,12 @@ function updateTorque(clickX, weight) {
     }
 }
 
+function updatePlankAngle() {
+    plankAngle = Math.max(-MAX_PLANK_ANGLE,Math.min(MAX_PLANK_ANGLE, (rightTorque - leftTorque) / 100));
+    plank.style.transform = `rotate(${plankAngle}deg)`;
+    console.log(`Left Torque: ${leftTorque}, Right Torque: ${rightTorque}, Plank Angle: ${plankAngle}`);
+}
+
 function updateWeights() {
     weights.forEach(weight => {
         weight.element.style.bottom = `10px`;
@@ -64,6 +74,3 @@ function updateNextWeight() {
 }
 
 // TEST AREA
-const plank = document.getElementById('seesaw-plank');
-
-plank.style.transform = `rotate(${plankAngle}deg)`;
