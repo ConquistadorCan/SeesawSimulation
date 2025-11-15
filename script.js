@@ -49,14 +49,15 @@ seesaw.addEventListener('click', function(event) {
     obj.style.background = nextColor;
     obj.textContent =`${nextWeight} KG`;
 
-    setTimeout(() => {
-        obj.style.bottom = `${PLANK_BASE_BOTTOM}px`;
-        weights.push({
+    weights.push({
             element: obj,
             weight: nextWeight,
             x: weightX,
-            y: PLANK_BASE_BOTTOM
+            color: nextColor
         });
+
+    setTimeout(() => {
+        obj.style.bottom = `${PLANK_BASE_BOTTOM}px`;
         updateWeightsPos();
         updateDisplays(clickX);
     }, 10);
@@ -65,6 +66,7 @@ seesaw.addEventListener('click', function(event) {
 
     addLog(nextWeight, clickX);
     updateWeightColor();
+    saveState();
 });
 
 seesaw.addEventListener('mousemove', function(event) {
@@ -173,6 +175,7 @@ function reset() {
     log.innerHTML = '';
 
     updateDisplays();
+    localStorage.removeItem('mustafafatihcan');
 }
 
 function updateWeightColor() {
@@ -180,6 +183,65 @@ function updateWeightColor() {
     nextColor = WEIGHT_COLORS[colorIndex];
 }
 
+function saveState() {
+    const data = {
+        plankAngle: plankAngle,
+        leftTorque: leftTorque,
+        rightTorque: rightTorque,
+        leftWeight: leftWeight,
+        rightWeight: rightWeight,
+        weights: weights.map(w => ({
+            weight: w.weight,
+            x: w.x,
+            color: w.color
+        }))
+    };
+    localStorage.setItem('mustafafatihcan', JSON.stringify(data));
+}
+
+function loadState() {
+    const data = JSON.parse(localStorage.getItem('mustafafatihcan'));
+    if (data) {
+        plankAngle = data.plankAngle;
+        leftTorque = data.leftTorque;
+        rightTorque = data.rightTorque;
+        leftWeight = data.leftWeight;
+        rightWeight = data.rightWeight;
+
+        data.weights.forEach(weight => {
+            const obj = document.createElement('div');
+            const size = 30 + weight.weight * 4;
+            obj.style.width = `${size}px`;
+            obj.style.height = `${size}px`;
+            obj.classList.add('weight');
+            obj.style.left = `${weight.x}px`;
+            obj.style.bottom = `500px`;
+            obj.style.background = weight.color;
+            obj.textContent =`${weight.weight} KG`;
+
+            seesaw.appendChild(obj);
+
+            weights.push({
+                element: obj,
+                weight: weight.weight,
+                x: weight.x,
+                color: weight.color
+            });
+
+            addLog(weight.weight, weight.x);
+
+            setTimeout(() => {
+                obj.style.bottom = `${PLANK_BASE_BOTTOM}px`;
+                updateWeightsPos();
+            }, 10);
+        });
+
+        plank.style.transform = `rotate(${plankAngle}deg)`;
+        updateDisplays();
+    }
+}
+
 // TEST AREA
 
+loadState();
 updateDisplays();
