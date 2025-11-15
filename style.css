@@ -71,6 +71,9 @@ body {
     position: absolute;
     pointer-events: none;
     display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
 }
 
 #seesaw-pivot {
@@ -90,6 +93,10 @@ body {
     border-radius: 50%;
     background: #D9CFC7;
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
     transition: bottom 0.5s;
 }
 

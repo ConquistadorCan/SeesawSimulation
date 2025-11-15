@@ -13,9 +13,11 @@ const PLANK_BASE_BOTTOM = 145; // 500px seesaw height / 4 because seesawplank is
 const PIVOT_X = seesaw.offsetWidth / 2;
 const PIVOT_Y = PLANK_BASE_BOTTOM + 10; // 10px is half of seesaw plank height
 const MAX_PLANK_ANGLE = 30;
+const WEIGHT_COLORS = ['#EFE9E3', '#D9CFC7']
 
 let plankAngle = 0;
 let nextWeight = Math.floor(Math.random() * 10) + 1;
+let nextColor = '#EFE9E3';
 let leftWeight = 0;
 let rightWeight = 0;
 
@@ -27,18 +29,25 @@ let rightTorque = 0;
 
 // EVENT LISTENERS
 seesaw.addEventListener('click', function(event) {
+    weightPreview.style.display = 'none';
+
     const rect = seesaw.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
     const weightX = clickX - 15;
 
     updateTorque(clickX, nextWeight);
-
+    
     updatePlankAngle();
-
+    
     const obj = document.createElement('div');
+    const size = 30 + nextWeight * 4;
+    obj.style.width = `${size}px`;
+    obj.style.height = `${size}px`;
     obj.classList.add('weight');
     obj.style.left = `${weightX}px`;
     obj.style.bottom = '500px';
+    obj.style.background = nextColor;
+    obj.textContent =`${nextWeight} KG`;
 
     setTimeout(() => {
         obj.style.bottom = `${PLANK_BASE_BOTTOM}px`;
@@ -55,15 +64,21 @@ seesaw.addEventListener('click', function(event) {
     seesaw.appendChild(obj);
 
     addLog(nextWeight, clickX);
+    updateWeightColor();
 });
 
 seesaw.addEventListener('mousemove', function(event) {
     const rect = seesaw.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
     const previewX = mouseX - 15;
+    const size = 30 + nextWeight * 4;
+    weightPreview.style.width = `${size}px`;
+    weightPreview.style.height = `${size}px`;
+    weightPreview.textContent =`${nextWeight} KG`;
+    weightPreview.style.background = nextColor;
     weightPreview.style.left = `${previewX}px`;
     weightPreview.style.bottom = `${PLANK_BASE_BOTTOM + 200}px`;
-    weightPreview.style.display = 'block';
+    weightPreview.style.display = 'flex';
 });
 
 seesaw.addEventListener('mouseleave', function(event) {
@@ -160,6 +175,10 @@ function reset() {
     updateDisplays();
 }
 
+function updateWeightColor() {
+    const colorIndex = Math.floor(Math.random() * WEIGHT_COLORS.length);
+    nextColor = WEIGHT_COLORS[colorIndex];
+}
 
 // TEST AREA
 
