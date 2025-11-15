@@ -15,10 +15,12 @@ let weights = [];
 let leftTorque = 0;
 let rightTorque = 0;
 
+
 // EVENT LISTENERS
 seesaw.addEventListener('click', function(event) {
     const rect = seesaw.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
+    const weightX = clickX - 15;
 
     updateTorque(clickX, nextWeight);
 
@@ -26,29 +28,27 @@ seesaw.addEventListener('click', function(event) {
 
     const obj = document.createElement('div');
     obj.classList.add('weight');
-    obj.style.left = `${clickX - 15}px`;
+    obj.style.left = `${weightX}px`;
     obj.style.bottom = '500px';
 
     setTimeout(() => {
         obj.style.bottom = `${PLANK_BASE_BOTTOM}px`;
+        weights.push({
+            element: obj,
+            weight: nextWeight,
+            x: weightX,
+            y: PLANK_BASE_BOTTOM
+        });
+        updateWeightsPos();
     }, 10);
     
     seesaw.appendChild(obj);
 
-    //updateWeights();
-
-    weights.push({
-        element: obj,
-        weight: nextWeight,
-        x: clickX,
-        y: PLANK_BASE_BOTTOM
-    });
-
     //updateNextWeight();
 });
 
-// HELPER FUNCTIONS
 
+// HELPER FUNCTIONS
 function updateTorque(clickX, weight) {
     if (clickX < PIVOT_X) { // left side
         leftTorque += (PIVOT_X - clickX) * weight;
@@ -60,17 +60,34 @@ function updateTorque(clickX, weight) {
 function updatePlankAngle() {
     plankAngle = Math.max(-MAX_PLANK_ANGLE,Math.min(MAX_PLANK_ANGLE, (rightTorque - leftTorque) / 100));
     plank.style.transform = `rotate(${plankAngle}deg)`;
-    console.log(`Left Torque: ${leftTorque}, Right Torque: ${rightTorque}, Plank Angle: ${plankAngle}`);
 }
 
-function updateWeights() {
-    weights.forEach(weight => {
-        weight.element.style.bottom = `10px`;
+function updateWeightsPos() {
+    const plankAngleRad = plankAngle * (Math.PI / 180);
+    weights.forEach(w => {
+        const dx = w.x - PIVOT_X;
+        const newY = PLANK_BASE_BOTTOM - dx * Math.tan(plankAngleRad);
+        w.element.style.bottom = `${newY}px`;
     });
 }
+
+/*  function updateWeightsPos() { //DID NOT WORK
+    const plankAngleRad = plankAngle * (Math.PI / 180);
+
+    weights.forEach(w => {
+        // calculate new x
+        const dx = (w.x - PIVOT_X) * Math.sin(plankAngleRad) * Math.sin(plankAngleRad);
+
+        // calculate new y
+        const dy = (w.x - PIVOT_X) * Math.sin(plankAngleRad) * - Math.cos(plankAngleRad);
+        w.element.style.bottom = `${w.y + dy}px`;
+
+    });
+}  */
 
 function updateNextWeight() {
     nextWeight = Math.floor(Math.random() * 10) + 1;
 }
+
 
 // TEST AREA
