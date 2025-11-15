@@ -6,6 +6,7 @@ const leftWeightDisplay = document.getElementById('left-weight');
 const rightWeightDisplay = document.getElementById('right-weight');
 const tiltAngleDisplay = document.getElementById('tilt-angle');
 const log = document.getElementById("log");
+const weightPreview = document.getElementById("weight-preview");
 document.getElementById("reset-button").addEventListener("click", reset);
 
 const PLANK_BASE_BOTTOM = 145; // 500px seesaw height / 4 because seesawplank is 25% of seesaw height + 20px seesaw plank height
@@ -54,6 +55,19 @@ seesaw.addEventListener('click', function(event) {
     seesaw.appendChild(obj);
 
     addLog(nextWeight, clickX);
+});
+
+seesaw.addEventListener('mousemove', function(event) {
+    const rect = seesaw.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const previewX = mouseX - 15;
+    weightPreview.style.left = `${previewX}px`;
+    weightPreview.style.bottom = `${PLANK_BASE_BOTTOM + 200}px`;
+    weightPreview.style.display = 'block';
+});
+
+seesaw.addEventListener('mouseleave', function(event) {
+    weightPreview.style.display = 'none';
 });
 
 

@@ -63,6 +63,16 @@ body {
     transition: transform 0.5s;
 }
 
+#weight-preview {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(217, 207, 199, 0.4); /* same as weight */
+    position: absolute;
+    pointer-events: none;
+    display: none;
+}
+
 #seesaw-pivot {
     position: absolute;
     width: 35px;
