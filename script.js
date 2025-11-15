@@ -5,6 +5,7 @@ const nextWeightDisplay = document.getElementById('next-weight');
 const leftWeightDisplay = document.getElementById('left-weight');
 const rightWeightDisplay = document.getElementById('right-weight');
 const tiltAngleDisplay = document.getElementById('tilt-angle');
+const log = document.getElementById("log");
 
 const PLANK_BASE_BOTTOM = 145; // 500px seesaw height / 4 because seesawplank is 25% of seesaw height + 20px seesaw plank height
 const PIVOT_X = seesaw.offsetWidth / 2;
@@ -51,6 +52,7 @@ seesaw.addEventListener('click', function(event) {
     
     seesaw.appendChild(obj);
 
+    addLog(nextWeight, clickX);
 });
 
 
@@ -116,6 +118,17 @@ function updateDisplays(clickX) {
 
     tiltAngleDisplay.textContent = plankAngle.toFixed(2) + '°';
 }
+
+function addLog(weight, clickX) {
+    const entry = document.createElement("div");
+
+    const side = (clickX < PIVOT_X) ? 'LEFT' : 'RIGHT';
+    const distance = Math.abs(clickX - PIVOT_X);
+
+    entry.textContent = `Added ${weight} KG to ${side} side at distance ${distance.toFixed(2)} px.`;
+    log.prepend(entry);
+}
+
 
 // TEST AREA
 
