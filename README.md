@@ -1,3 +1,5 @@
-Initial setup for seesaw simulation project.
+Simple seesaw simulation built with vanilla JS, HTML and CSS.
 
-Prepared using with pure HTML, CSS, JS
+Click on the seesaw plank to drop weights.
+
+Live demo: https://conquistadorcan.github.io/SeesawSimulation/
